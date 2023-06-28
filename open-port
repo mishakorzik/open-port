@@ -1,0 +1,225 @@
+#!/usr/bin/python3
+import os, sys, socket, time, random
+import subprocess, threading
+try:
+    import requests
+    limited = False
+except:
+    limited = True
+osname = os.name
+closed = []
+active = []
+
+__version__ = "1.0.0"
+__author__ = "mishakorzik"
+
+def clear():
+    if os.name == "nt":
+        os.system("cls")
+    else:
+        os.system("clear")
+
+def internet():
+    hosts = ["google.com", "duckduckgo.com", "youtube.com", "github.com"]
+    while True:
+        if osname == "nt":
+            _, output = subprocess.getstatusoutput("ping -W 5 -n 1 "+random.choice(hosts))
+        else:
+            _, output = subprocess.getstatusoutput("ping -W 5 -c 1 "+random.choice(hosts))
+        if "unknown host" in output:
+            for check in active:
+                pid, port = check.split("|")
+                port = port.replace("port:", "")
+                pid = pid.replace("pid:", "")
+                pid = int(pid)
+                pid += 1
+                _, kill = subprocess.getstatusoutput("kill -9 "+str(pid))
+                if "No such process" in kill:
+                    pid -= 2
+                    _, kill = subprocess.getstatusoutput("kill -9 "+str(pid))
+                    active.remove(check)
+                else:
+                    active.remove(check)
+        time.sleep(2)
+
+th1 = threading.Thread(target=internet)
+th1.start()
+
+print(f"""\033[01;36m┌─┐┌─┐┌─┐┌┐┌   ┌─┐┌─┐┬─┐┌┬┐
+\033[01;36m│ │├─┘├┤ │││───├─┘│ │├┬┘ │
+\033[01;36m└─┘┴  └─┘┘└┘   ┴  └─┘┴└─ ┴\033[0m
+ Developer   : {__author__}
+ Version     : v1.0.0""")
+while True:
+    try:
+        cmd = input(f"\033[01;32mopen-port\033[0m:\033[01;34m~\033[0m# \033[0m")
+    except:
+        for check in active:
+            pid, _ = check.split("|")
+            pid = pid.replace("pid:", "")
+            pid = int(pid)
+            pid += 1
+            _, kill = subprocess.getstatusoutput("kill -9 "+str(pid))
+            if "No such process" in kill:
+                pid -= 2
+                os.system("kill -9 "+str(pid))
+        pid = os.getpid()
+        os.system("kill -9 "+str(pid))
+    if cmd == "help" or cmd == "?":
+        if limited == False:
+            print("\033[01;33mbasic:\033[0m")
+            print(" help         : \033[01;34mshow this help menu\033[0m")
+            print(" addr         : \033[01;34mshow port ip-address\033[0m")
+            print(" clear        : \033[01;34mclear all terminal\033[0m")
+            print(" update       : \033[01;34mupdate tool to latest version\033[0m")
+            print(" ping <host>  : \033[01;34mcheck the connection speed\033[0m")
+            print(" req <host>   : \033[01;34mget request from host\033[0m")
+            print(" ")
+            print("\033[01;33mports:\033[0m")
+            print(" ports        : \033[01;34mshow all opened ports\033[0m")
+            print(" open <port>  : \033[01;34mopen port to internet\033[0m")
+            print(" close <port> : \033[01;34mclose port to internet\033[0m")
+        else:
+            print("\033[01;33mbasic:\033[0m")
+            print(" help         : \033[01;34mshow this help menu\033[0m")
+            print(" addr         : \033[01;34mshow port ip-address\033[0m")
+            print(" clear        : \033[01;34mclear all terminal\033[0m")
+            print(" ping <host>  : \033[01;34mcheck the connection speed\033[0m")
+            print(" ")
+            print("\033[01;33mports:\033[0m")
+            print(" ports        : \033[01;34mshow all opened ports\033[0m")
+            print(" open <port>  : \033[01;34mopen port to internet\033[0m")
+            print(" close <port> : \033[01;34mclose port to internet\033[0m")
+    elif cmd == "stop":
+        for check in active:
+            pid, _ = check.split("|")
+            pid = pid.replace("pid:", "")
+            pid = int(pid)
+            pid += 1
+            _, kill = subprocess.getstatusoutput("kill -9 "+str(pid))
+            if "No such process" in kill:
+                pid -= 2
+                os.system("kill -9 "+str(pid))
+        pid = os.getpid()
+        os.system("kill -9 "+str(pid))
+    elif "open" in cmd:
+        try:
+            try:
+                _, port = cmd.split(" ")
+                port = int(port)
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                socket.setdefaulttimeout(1)
+                result = s.connect_ex(("serveo.net", port))
+                if port < 1024:
+                    print("\033[01;31mcmd\033[0m: allowed ports 1024-65535")
+            except:
+                result = 0
+            if result == 0:
+                print("\033[01;31mcmd\033[0m: port already in use")
+            else:
+                if port < 1024:
+                    pass
+                else:
+                    port = str(port)
+                    proc = subprocess.Popen([f"ssh -R {port}:localhost:{port} serveo.net >/dev/null 2>&1 &"], shell=True)
+                    pid = str(proc.pid)
+                    active.append("pid:"+pid+"|port:"+port)
+                    print("\033[01;34mcmd\033[0m: port successful opened\033[0m")
+        except:
+            print("\033[01;31mcmd\033[0m: bad usage")
+    elif "close" in cmd:
+        _, port = cmd.split(" ")
+        port = str(port)
+        try:
+            error = True
+            for check in active:
+                if "port:"+port in check:
+                    error = False
+                    pid, port = check.split("|")
+                    pid = pid.replace("pid:", "")
+                    pid = int(pid)
+                    pid += 1
+                    port = port.replace("port:", "")
+                    closed.append(str(port))
+                    _, kill = subprocess.getstatusoutput("kill -9 "+str(pid))
+                    if "No such process" in kill:
+                        pid -= 2
+                        _, kill = subprocess.getstatusoutput("kill -9 "+str(pid))
+                        print("\033[01;31mport closed\033[0m")
+                        active.remove(check)
+                        try:
+                            restart.remove(str(port))
+                        except:
+                            pass
+                    else:
+                        print("\033[01;34mcmd\033[0m: port successful closed\033[0m")
+                        active.remove(check)
+                        try:
+                            restart.remove(str(port))
+                        except:
+                            pass
+            if error == True:
+                print("\033[01;31mcmd\033[0m: port is not opened.")
+        except:
+            print("\033[01;31mcmd: \033[0mport is closed.")
+    elif cmd == "clear":
+        clear()
+    elif "ping" in cmd:
+        try:
+            _, host = cmd.split(" ")
+            if osname == "nt":
+                os.system("ping -W 5 -n 5 "+str(host))
+            else:
+                os.system("ping -W 5 -c 5 "+str(host))
+        except:
+            print("\033[01;31mcmd\033[0m: bad usage")
+    elif "req" in cmd:
+        if limited == True:
+            print(f"\033[01;31mcmd\033[0m: command not found: "+cmd)
+        else:
+            try:
+                _, host = cmd.split(" ")
+                host = str(host)
+                if "://" in host:
+                    try:
+                        print(requests.get(host, headers={"User-Agent": "Mozilla/5.0 (compatible; Port-Open/1.0; +https://github.com/mishakorzik/port-open)"}).text)
+                    except:
+                        print("\033[01;31mcmd\033[0m: connection to "+host+" refused")
+                else:
+                    try:
+                        print(requests.get("http://"+host, headers={"User-Agent": "Mozilla/5.0 (compatible; Port-Open/1.0; +https://github.com/mishakorzik/port-open)"}).text)
+                    except:
+                        print("\033[01;31mcmd\033[0m: connection to "+host+" refused")
+            except:
+                print("\033[01;31mcmd\033[0m: bad usage")
+    elif cmd == "update":
+        if limited == True:
+            print(f"\033[01;31mcmd\033[0m: command not found: "+cmd)
+        else:
+            get = str(requests.get("https://raw.githubusercontent.com/mishakorzik/open-port/main/version.txt").text)
+            get = get.replace("\n", "")
+            if get == __version__:
+                print("\033[01;34mcmd\033[0m: tool does not need an update\033[0m")
+            else:
+                print("\033[01;34mcmd\033[0m: updating tool to latest version\033[0m")
+                os.system("rm -rf update_open-port.sh")
+                os.system("wget https://raw.githubusercontent.com/mishakorzik/AutoUpdateMyTools/main/update_open-port.sh")
+                os.system("bash update_open-port.sh")
+    elif cmd == "ports":
+        if active == [] and closed == []:
+            print("\033[01;31mcmd\033[0m: you have no open ports")
+        else:
+            for check in active:
+                _, port = check.split("|")
+                port = port.replace("port:", "")
+                print("\033[01m- \033[01;32mopened\033[0m: "+str(port))
+            for port in closed:
+                print("\033[01m- \033[01;31mclosed\033[0m: "+str(port))
+    elif cmd == "addr":
+        ip = socket.gethostbyname("serveo.net")
+        print("\033[01;32mIP\033[0m: "+str(ip))
+    else:
+        if cmd == "":
+            pass
+        else:
+            print(f"\033[01;31mcmd\033[0m: command not found: "+cmd)
