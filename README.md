@@ -5,8 +5,21 @@
 
 ## Install
 ```bash
-apt install wget
-apt install python3-pip
+#for ubuntu
+sudo apt-get install wget
+sudo apt-get install python3-pip
+wget https://raw.githubusercontent.com/mishakorzik/open-port/main/open-port
+chmod +x open-port
+
+#for debian
+sudo apt install wget
+sudo apt install python3-pip
+wget https://raw.githubusercontent.com/mishakorzik/open-port/main/open-port
+chmod +x open-port
+
+#for termux
+pkg install wget
+pkg install python3-pip
 wget https://raw.githubusercontent.com/mishakorzik/open-port/main/open-port
 chmod +x open-port
 ```
