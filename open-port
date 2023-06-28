@@ -68,7 +68,7 @@ while True:
     if cmd == "help" or cmd == "?":
         if limited == False:
             print("\033[01;33mbasic:\033[0m")
-            print(" help         : \033[01;34mshow this help menu\033[0m")
+            print(" stop         : \033[01;34mclose all ports and exit\033[0m")
             print(" addr         : \033[01;34mshow port ip-address\033[0m")
             print(" clear        : \033[01;34mclear all terminal\033[0m")
             print(" update       : \033[01;34mupdate tool to latest version\033[0m")
@@ -81,7 +81,7 @@ while True:
             print(" close <port> : \033[01;34mclose port to internet\033[0m")
         else:
             print("\033[01;33mbasic:\033[0m")
-            print(" help         : \033[01;34mshow this help menu\033[0m")
+            print(" stop         : \033[01;34mclose all ports and exit\033[0m")
             print(" addr         : \033[01;34mshow port ip-address\033[0m")
             print(" clear        : \033[01;34mclear all terminal\033[0m")
             print(" ping <host>  : \033[01;34mcheck the connection speed\033[0m")
