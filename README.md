@@ -33,3 +33,7 @@ chmod +x open-port
 ```
 
 ##### Write the command 'help' or '?'  to view all commands
+
+## Repository
+
+**Repository statistic for views** ![Views](https://profile-counter.glitch.me/open-port/count.svg)
