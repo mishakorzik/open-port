@@ -9,21 +9,25 @@
 ```bash
 #for ubuntu
 sudo apt-get install wget
+sudo apt-get install openssh
 sudo apt-get install python3-pip
-wget https://raw.githubusercontent.com/mishakorzik/open-port/main/open-port
+wget https://raw.githubusercontent.com/mishakorzik/open-port/main/install.sh
+
 chmod +x open-port
 
 #for debian
 sudo apt install wget
+sudo apt install openssh
 sudo apt install python3-pip
-wget https://raw.githubusercontent.com/mishakorzik/open-port/main/open-port
-chmod +x open-port
+wget https://raw.githubusercontent.com/mishakorzik/open-port/main/install.sh
+bash install.sh
 
 #for termux
 pkg install wget
+pkg install openssh
 pkg install python3-pip
-wget https://raw.githubusercontent.com/mishakorzik/open-port/main/open-port
-chmod +x open-port
+wget https://raw.githubusercontent.com/mishakorzik/open-port/main/install.sh
+bash install.sh
 ```
 
 ## Usage
