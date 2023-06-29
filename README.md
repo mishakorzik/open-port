@@ -12,8 +12,7 @@ sudo apt-get install wget
 sudo apt-get install openssh
 sudo apt-get install python3-pip
 wget https://raw.githubusercontent.com/mishakorzik/open-port/main/install.sh
-
-chmod +x open-port
+bash install.sh
 
 #for debian
 sudo apt install wget
