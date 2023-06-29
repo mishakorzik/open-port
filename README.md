@@ -39,6 +39,14 @@ bash install.sh
 
 ##### Write the command 'help' or '?'  to view all commands
 
+## Example 
+
+##### This video shows an example of how to open ports and how to use them.
+
+##### command "addr" shows to which ip address all your ports were opened.
+
+<img width="99.9%" src="https://raw.githubusercontent.com/mishakorzik/open-port/main/example.gif"/>
+
 ## Repository
 
 **Repository statistic for views** ![Views](https://profile-counter.glitch.me/open-port/count.svg)
